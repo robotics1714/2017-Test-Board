@@ -38,7 +38,10 @@ public class Robot extends IterativeRobot {
 		DRUUT=new RobotDrive(talon1,talon2);
 		FUUT=new Encoder(0,1);
 		SUUT=new Encoder(2,3); 
-		
+		SmartDashboard.putBoolean("NOOT", Noot.get());
+		SmartDashboard.putNumber("Encoder1", FUUT.get());
+		SmartDashboard.putNumber("Encoder2", SUUT.get());
+		SmartDashboard.putNumber("Potentiometer", pot.get());
 		
 	}
 
@@ -95,10 +98,6 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		//System.out.println(pot.get());
 		DRUUT.arcadeDrive(stick);
-		SmartDashboard.putBoolean("NOOT", Noot.get());
-		SmartDashboard.putNumber("Encoder1", FUUT.get());
-		SmartDashboard.putNumber("Encoder2", SUUT.get());
-		SmartDashboard.putNumber("Potentiometer", pot.get());
 	}
 
 	/**
