@@ -6,7 +6,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import com.ctre.CANTalon; 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotDrive; 
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -21,10 +24,25 @@ public class Robot extends IterativeRobot {
 	SendableChooser<String> chooser = new SendableChooser<>();
 	Joystick stick;
 	AnalogPotentiometer pot;
+	CANTalon talon1,talon2;
+	DigitalInput Noot;
+	Encoder FUUT,SUUT;
+	RobotDrive DRUUT;
 	
 	public Robot() {
 		stick= new Joystick(0);
 		pot = new AnalogPotentiometer(0, 3600, 0);
+		talon1=new CANTalon(1);
+		talon2=new CANTalon(2);
+		Noot=new DigitalInput(4); 
+		DRUUT=new RobotDrive(talon1,talon2);
+		FUUT=new Encoder(0,1);
+		SUUT=new Encoder(2,3); 
+		SmartDashboard.putBoolean("NOOT", Noot.get());
+		SmartDashboard.putNumber("Encoder1", FUUT.get());
+		SmartDashboard.putNumber("Encoder2", SUUT.get());
+		SmartDashboard.putNumber("Potentiometer", pot.get());
+		
 	}
 
 	/**
@@ -78,7 +96,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		System.out.println(pot.get());
+		//System.out.println(pot.get());
+		DRUUT.arcadeDrive(stick);
 	}
 
 	/**
