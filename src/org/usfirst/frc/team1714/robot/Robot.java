@@ -99,13 +99,27 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Encoder1", FUUT.get());
 		SmartDashboard.putNumber("Encoder2", SUUT.get());
 		SmartDashboard.putNumber("Potentiometer", pot.get());
+		if(Noot.get()==true){
+			DRUUT.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+			DRUUT.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+			DRUUT.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+			DRUUT.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);}
+		
 	}
+	
 
 	/**
 	 * This function is called periodically during test mode
 	 */
 	@Override
 	public void testPeriodic() {
+	
+	
+	
+		
+		
+		// TODO Auto-generated method stub
+		
 	}
-}
 
+}
