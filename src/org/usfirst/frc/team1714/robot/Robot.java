@@ -35,7 +35,7 @@ public class Robot extends IterativeRobot {
 		talon1=new CANTalon(1);
 		talon2=new CANTalon(2);
 		Noot=new DigitalInput(4); 
-		DRUUT=new RobotDrive(talon1,talon2);
+		//DRUUT=new RobotDrive(talon1,talon2);
 		FUUT=new Encoder(0,1);
 		SUUT=new Encoder(2,3); 
 		
@@ -94,17 +94,22 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		//System.out.println(pot.get());
-		DRUUT.arcadeDrive(stick);
+		//DRUUT.arcadeDrive(stick);
 		SmartDashboard.putBoolean("NOOT", Noot.get());
 		SmartDashboard.putNumber("Encoder1", FUUT.get());
 		SmartDashboard.putNumber("Encoder2", SUUT.get());
 		SmartDashboard.putNumber("Potentiometer", pot.get());
-		if(Noot.get()==true){
-			DRUUT.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
-			DRUUT.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-			DRUUT.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
-			DRUUT.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);}
-		
+		talon1.set(.5);
+		talon2.set(.5);
+		if(Noot.get()==false){
+			//DRUUT.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+			//DRUUT.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+			//DRUUT.setInvertedMotor(RobotDrive.MotorType.kRearLeft, false);
+			//DRUUT.setInvertedMotor(RobotDrive.MotorType.kRearRight, false);
+			talon1.set(-.5);
+			talon2.set(-.5);
+		}
+	
 	}
 	
 
