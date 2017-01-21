@@ -121,10 +121,6 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Talon2", talon2.getOutputCurrent());
 		SmartDashboard.putNumber("Talon2", talon2.getOutputVoltage());
 		
-		talon1.getOutputCurrent();
-		talon1.getOutputVoltage();
-		talon2.getOutputCurrent();
-		talon2.getOutputVoltage();
 		
 		//talon1.set(.5);
 		//talon2.set(.5);
