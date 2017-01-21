@@ -8,9 +8,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.CANTalon; 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive; 
 import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.cscore.UsbCamera;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,7 +34,10 @@ public class Robot extends IterativeRobot {
 	DigitalInput LS1;
 	Encoder encoder1,encoder2;
 	RobotDrive drive;
-	Ultrasonic ultrasonic;
+	Ultrasonic VEXultrasonic;
+	AnalogInput ezSonic;
+	DigitalOutput ezSonicPower;
+	int ezSonicValue;
 	
 	public Robot() {
 		stick= new Joystick(0);
@@ -41,9 +48,9 @@ public class Robot extends IterativeRobot {
 		//drive=new RobotDrive(talon1,talon2);
 		encoder1 = new Encoder(0,1);
 		encoder2 = new Encoder(2,3); 
-		ultrasonic = new Ultrasonic(9,8); 
-		
-		
+		VEXultrasonic = new Ultrasonic(9,8); 
+		ezSonic = new AnalogInput(1);
+		ezSonicPower = new DigitalOutput(6);
 	}
 
 	/**
@@ -55,8 +62,9 @@ public class Robot extends IterativeRobot {
 		chooser.addDefault("Default Auto", defaultAuto);
 		chooser.addObject("My Auto", customAuto);
 		SmartDashboard.putData("Auto choices", chooser);
-		ultrasonic.setAutomaticMode(true);
+		VEXultrasonic.setAutomaticMode(true);
 		//ultrasonic.setDistanceUnits(Ultrasonic.Unit.kInches);
+		CameraServer.getInstance().addAxisCamera("axis-camera.local");
 	}
 
 	/**
@@ -105,18 +113,21 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Encoder1", encoder1.get());
 		SmartDashboard.putNumber("Encoder2", encoder2.get());
 		SmartDashboard.putNumber("Potentiometer", pot.get());
-		SmartDashboard.putNumber("Ultrasonic distance", ultrasonic.getRangeInches());
-		talon1.set(.5);
-		talon2.set(.5);
+		
+		SmartDashboard.putNumber("VEXUltrasonic distance", VEXultrasonic.getRangeInches());
+		//talon1.set(.5);
+		//talon2.set(.5);
 		if(LS1.get()==false){
 			//drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
 			//drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
 			//drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, false);
 			//drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, false);
-			talon1.set(-.5);
-			talon2.set(-.5);
+			//talon1.set(-.5);
+			//talon2.set(-.5);
 		}
-	
+		ezSonicPower.set(true);
+		ezSonicValue = (int)(ezSonic.getValue() / 0.976);
+		SmartDashboard.putNumber("REAL Ultrasonic distance", ezSonicValue);
 	}
 	
 
