@@ -2,7 +2,6 @@ package org.usfirst.frc.team1714.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PWM;
 //import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -14,8 +13,6 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive; 
 import edu.wpi.first.wpilibj.Ultrasonic;
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.cscore.UsbCamera;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -65,7 +62,6 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Auto choices", chooser);
 		VEXultrasonic.setAutomaticMode(true);
 		//ultrasonic.setDistanceUnits(Ultrasonic.Unit.kInches);
-		CameraServer.getInstance().addAxisCamera("axis-camera.local");
 	}
 
 	/**
@@ -117,8 +113,8 @@ public class Robot extends IterativeRobot {
 		
 		SmartDashboard.putNumber("VEXUltrasonic distance", VEXultrasonic.getRangeInches());
 		SmartDashboard.putNumber("Talon1", talon1.getOutputVoltage());
-		SmartDashboard.putNumber("Talon1", talon1.getOutputCurrent());
-		SmartDashboard.putNumber("Talon2", talon2.getOutputCurrent());
+		SmartDashboard.putNumber("Talon1Current", talon1.getOutputCurrent());
+		SmartDashboard.putNumber("Talon2Current", talon2.getOutputCurrent());
 		SmartDashboard.putNumber("Talon2", talon2.getOutputVoltage());
 		
 		
@@ -129,9 +125,15 @@ public class Robot extends IterativeRobot {
 			//drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
 			//drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, false);
 			//drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, false);
-			//talon1.set(-.5);
-			//talon2.set(-.5);
+			talon1.set(-1);
+			talon2.set(-.25);
 		}
+		else
+		{
+			talon1.set(0);
+			talon2.set(0);
+		}
+		
 		ezSonicPower.set(true);
 		ezSonicValue = (int)(ezSonic.getValue() / 0.976);
 		SmartDashboard.putNumber("REAL Ultrasonic distance", ezSonicValue);
