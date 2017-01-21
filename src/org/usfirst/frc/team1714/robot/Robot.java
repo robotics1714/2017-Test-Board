@@ -2,7 +2,7 @@ package org.usfirst.frc.team1714.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,6 +10,8 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive; 
+import edu.wpi.first.wpilibj.Ultrasonic;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -25,19 +27,21 @@ public class Robot extends IterativeRobot {
 	Joystick stick;
 	AnalogPotentiometer pot;
 	CANTalon talon1,talon2;
-	DigitalInput Noot;
-	Encoder FUUT,SUUT;
-	RobotDrive DRUUT;
+	DigitalInput LS1;
+	Encoder encoder1,encoder2;
+	RobotDrive drive;
+	Ultrasonic ultrasonic;
 	
 	public Robot() {
 		stick= new Joystick(0);
 		pot = new AnalogPotentiometer(0, 3600, 0);
 		talon1=new CANTalon(1);
 		talon2=new CANTalon(2);
-		Noot=new DigitalInput(4); 
-		//DRUUT=new RobotDrive(talon1,talon2);
-		FUUT=new Encoder(0,1);
-		SUUT=new Encoder(2,3); 
+		LS1=new DigitalInput(4); 
+		//drive=new RobotDrive(talon1,talon2);
+		encoder1 = new Encoder(0,1);
+		encoder2 = new Encoder(2,3); 
+		ultrasonic = new Ultrasonic(9,8); 
 		
 		
 	}
@@ -51,6 +55,8 @@ public class Robot extends IterativeRobot {
 		chooser.addDefault("Default Auto", defaultAuto);
 		chooser.addObject("My Auto", customAuto);
 		SmartDashboard.putData("Auto choices", chooser);
+		ultrasonic.setAutomaticMode(true);
+		//ultrasonic.setDistanceUnits(Ultrasonic.Unit.kInches);
 	}
 
 	/**
@@ -94,18 +100,19 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		//System.out.println(pot.get());
-		//DRUUT.arcadeDrive(stick);
-		SmartDashboard.putBoolean("NOOT", Noot.get());
-		SmartDashboard.putNumber("Encoder1", FUUT.get());
-		SmartDashboard.putNumber("Encoder2", SUUT.get());
+		//drive.arcadeDrive(stick);
+		SmartDashboard.putBoolean("LS1", LS1.get());
+		SmartDashboard.putNumber("Encoder1", encoder1.get());
+		SmartDashboard.putNumber("Encoder2", encoder2.get());
 		SmartDashboard.putNumber("Potentiometer", pot.get());
+		SmartDashboard.putNumber("Ultrasonic distance", ultrasonic.getRangeInches());
 		talon1.set(.5);
 		talon2.set(.5);
-		if(Noot.get()==false){
-			//DRUUT.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
-			//DRUUT.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-			//DRUUT.setInvertedMotor(RobotDrive.MotorType.kRearLeft, false);
-			//DRUUT.setInvertedMotor(RobotDrive.MotorType.kRearRight, false);
+		if(LS1.get()==false){
+			//drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+			//drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+			//drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, false);
+			//drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, false);
 			talon1.set(-.5);
 			talon2.set(-.5);
 		}
