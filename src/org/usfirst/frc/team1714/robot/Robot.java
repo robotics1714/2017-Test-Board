@@ -2,6 +2,7 @@ package org.usfirst.frc.team1714.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PWM;
 //import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -115,6 +116,16 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Potentiometer", pot.get());
 		
 		SmartDashboard.putNumber("VEXUltrasonic distance", VEXultrasonic.getRangeInches());
+		SmartDashboard.putNumber("Talon1", talon1.getOutputVoltage());
+		SmartDashboard.putNumber("Talon1", talon1.getOutputCurrent());
+		SmartDashboard.putNumber("Talon2", talon2.getOutputCurrent());
+		SmartDashboard.putNumber("Talon2", talon2.getOutputVoltage());
+		
+		talon1.getOutputCurrent();
+		talon1.getOutputVoltage();
+		talon2.getOutputCurrent();
+		talon2.getOutputVoltage();
+		
 		//talon1.set(.5);
 		//talon2.set(.5);
 		if(LS1.get()==false){
