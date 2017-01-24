@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive; 
 import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.AnalogGyro;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,6 +37,7 @@ public class Robot extends IterativeRobot {
 	AnalogInput ezSonic;
 	DigitalOutput ezSonicPower;
 	int ezSonicValue;
+	AnalogGyro gyro;
 	
 	public Robot() {
 		stick= new Joystick(0);
@@ -49,6 +51,7 @@ public class Robot extends IterativeRobot {
 		VEXultrasonic = new Ultrasonic(9,8); 
 		ezSonic = new AnalogInput(1);
 		ezSonicPower = new DigitalOutput(6);
+		gyro = new AnalogGyro(1);
 	}
 
 	/**
@@ -116,6 +119,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Talon1Current", talon1.getOutputCurrent());
 		SmartDashboard.putNumber("Talon2Current", talon2.getOutputCurrent());
 		SmartDashboard.putNumber("Talon2", talon2.getOutputVoltage());
+		SmartDashboard.putNumber("Gyro Angles", gyro.getAngle());
 		
 		
 		//talon1.set(.5);
