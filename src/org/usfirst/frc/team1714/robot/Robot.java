@@ -121,6 +121,15 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Talon2", talon2.getOutputVoltage());
 		SmartDashboard.putNumber("Gyro Angles", gyro.getAngle());
 		
+		if(LS1.get()==false){
+		gyro.initGyro();
+		gyro.calibrate();
+		gyro.getAngle();
+		
+		}
+		
+		
+		
 		
 		//talon1.set(.5);
 		//talon2.set(.5);
