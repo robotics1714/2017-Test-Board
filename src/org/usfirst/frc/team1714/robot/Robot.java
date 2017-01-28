@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
 		talon1=new CANTalon(1);
 		talon2=new CANTalon(2);
 		LS1=new DigitalInput(4); 
-		//drive=new RobotDrive(talon1,talon2);
+		drive=new RobotDrive(talon1,talon2);
 		encoder1 = new Encoder(0,1);
 		encoder2 = new Encoder(2,3); 
 		VEXultrasonic = new Ultrasonic(9,8); 
@@ -105,7 +105,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		//System.out.println(pot.get());
-		//drive.arcadeDrive(stick);
+		drive.arcadeDrive(stick);
 		SmartDashboard.putBoolean("LS1", LS1.get());
 		SmartDashboard.putNumber("Encoder1", encoder1.get());
 		SmartDashboard.putNumber("Encoder2", encoder2.get());
@@ -117,6 +117,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Talon2Current", talon2.getOutputCurrent());
 		SmartDashboard.putNumber("Talon2", talon2.getOutputVoltage());
 		SmartDashboard.putNumber("Gyro Angles", gyro.getAngle());
+		SmartDashboard.putNumber("Motor1 speed in PWM value", talon1.getSpeed());
+		SmartDashboard.putNumber("Motor2 speed in PWM value", talon2.getSpeed());
 		
 	
 		
@@ -125,20 +127,20 @@ public class Robot extends IterativeRobot {
 		
 		//talon1.set(.5);
 		//talon2.set(.5);
-		if(LS1.get()==false){
+		//if(LS1.get()==false){
 			//drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
 			//drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
 			//drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, false);
 			//drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, false);
-			talon1.set(-1);
-			talon2.set(-.25);
-			gyro.reset();
-		}
-		else
-		{
-			talon1.set(0);
-			talon2.set(0);
-		}
+		//	talon1.set(-1);
+		//	talon2.set(-.25);
+		//	gyro.reset();
+		//}
+		//else
+		//{
+		//	talon1.set(0);
+		//	talon2.set(0);
+		//}
 		
 	}
 	
