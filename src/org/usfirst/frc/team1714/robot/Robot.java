@@ -101,7 +101,9 @@ public class Robot extends IterativeRobot {
 			break;
 		}
 	}
-
+	public void gyroInit() {
+		gyro.calibrate();
+	}
 	/**
 	 * This function is called periodically during operator control
 	 */
@@ -121,12 +123,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Talon2", talon2.getOutputVoltage());
 		SmartDashboard.putNumber("Gyro Angles", gyro.getAngle());
 		
-		if(LS1.get()==false){
-		gyro.initGyro();
-		gyro.calibrate();
-		gyro.getAngle();
-		
-		}
+	
 		
 		
 		
