@@ -34,9 +34,6 @@ public class Robot extends IterativeRobot {
 	Encoder encoder1,encoder2;
 	RobotDrive drive;
 	Ultrasonic VEXultrasonic;
-	AnalogInput ezSonic;
-	DigitalOutput ezSonicPower;
-	int ezSonicValue;
 	AnalogGyro gyro;
 	
 	public Robot() {
@@ -49,8 +46,6 @@ public class Robot extends IterativeRobot {
 		encoder1 = new Encoder(0,1);
 		encoder2 = new Encoder(2,3); 
 		VEXultrasonic = new Ultrasonic(9,8); 
-		ezSonic = new AnalogInput(1);
-		ezSonicPower = new DigitalOutput(6);
 		gyro = new AnalogGyro(1);
 	}
 
@@ -65,6 +60,9 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Auto choices", chooser);
 		VEXultrasonic.setAutomaticMode(true);
 		//ultrasonic.setDistanceUnits(Ultrasonic.Unit.kInches);
+		gyro.initGyro();
+		gyro.calibrate();
+		gyro.setSensitivity(0.001675);
 	}
 
 	/**
@@ -101,9 +99,6 @@ public class Robot extends IterativeRobot {
 			break;
 		}
 	}
-	public void gyroInit() {
-		gyro.calibrate();
-	}
 	/**
 	 * This function is called periodically during operator control
 	 */
@@ -137,6 +132,7 @@ public class Robot extends IterativeRobot {
 			//drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, false);
 			talon1.set(-1);
 			talon2.set(-.25);
+			gyro.reset();
 		}
 		else
 		{
@@ -144,9 +140,6 @@ public class Robot extends IterativeRobot {
 			talon2.set(0);
 		}
 		
-		ezSonicPower.set(true);
-		ezSonicValue = (int)(ezSonic.getValue() / 0.976);
-		SmartDashboard.putNumber("REAL Ultrasonic distance", ezSonicValue);
 	}
 	
 
