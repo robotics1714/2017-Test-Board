@@ -2,7 +2,7 @@ package org.usfirst.frc.team1714.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-//import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,7 +36,10 @@ public class Robot extends IterativeRobot {
 	RobotDrive drive;
 	Ultrasonic VEXultrasonic;
 	AnalogGyro gyro;
-	Victor victor;
+	Victor victorD1left,victorD1right,victorD2left, victorD2right;
+	Timer timer;
+	boolean timerStarted, timerStopped;
+	double speed;
 	
 	public Robot() {
 		stick= new Joystick(0);
@@ -49,7 +52,11 @@ public class Robot extends IterativeRobot {
 		encoder2 = new Encoder(2,3); 
 		VEXultrasonic = new Ultrasonic(9,8); 
 		gyro = new AnalogGyro(1);
-		victor = new Victor(0);
+		victorD1left = new Victor(0);
+		victorD2right = new Victor(1);
+		victorD1right = new Victor(2);
+		victorD2left = new Victor(3);
+		
 	}
 
 	/**
@@ -66,6 +73,9 @@ public class Robot extends IterativeRobot {
 		gyro.initGyro();
 		gyro.calibrate();
 		gyro.setSensitivity(0.001675);
+		timer = new Timer();
+		timerStarted = false;
+		timerStopped = true;
 	}
 
 	/**
@@ -120,9 +130,37 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Talon2Current", talon2.getOutputCurrent());
 		SmartDashboard.putNumber("Talon2", talon2.getOutputVoltage());
 		SmartDashboard.putNumber("Gyro Angles", gyro.getAngle());
-		SmartDashboard.putNumber("Victor Motor speed in PWM value", victor.getSpeed());
+		//SmartDashboard.putNumber("Victor Motor speed in PWM value", victor.getSpeed());
 		//SmartDashboard.putNumber("Motor2 speed in PWM value", talon2.getSpeed());
+		if(!LS1.get()){
+			if(!timerStarted && timerStopped){
+				timer.start();
+				timerStarted = true;
+				timerStopped = false;
+			}
+			else if(timerStarted && !timerStopped){
+				timer.stop();
+				timerStarted = false;
+				timerStopped = true;
+			}
+			
+			
+		}
 		
+		if(!timer.hasPeriodPassed(10.0)){
+			//victorD1left.set(speed);
+			//victorD2left.set(speed);
+			//victorD1right.set(speed);
+			//victorD2right.set(speed);
+			talon1.set(0.5);
+		}
+		else{
+			//victorD1left.set(-speed);
+			//victorD2left.set(-speed);
+			//victorD1right.set(-speed);
+			//victorD2right.set(-speed);
+			talon1.set(-0.5);
+		}
 	
 		
 		
@@ -130,7 +168,7 @@ public class Robot extends IterativeRobot {
 		
 		//talon1.set(.5);
 		//talon2.set(.5);
-		if(LS1.get()==false){
+		//if(LS1.get()==false){
 			//drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
 			//drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
 			//drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, false);
@@ -138,14 +176,14 @@ public class Robot extends IterativeRobot {
 		//	talon1.set(-1);
 		//	talon2.set(-.25);
 		//	gyro.reset();
-			victor.set(0.5);
-		}
-		else
-		{
+		//	victor.set(0.5);
+		//}
+		//else
+		//{
 		//	talon1.set(0);
 		//	talon2.set(0);
-			victor.set(1);
-		}
+		//	victor.set(1);
+		//}
 		
 	}
 	
