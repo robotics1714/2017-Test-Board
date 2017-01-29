@@ -52,10 +52,10 @@ public class Robot extends IterativeRobot {
 		encoder2 = new Encoder(2,3); 
 		VEXultrasonic = new Ultrasonic(9,8); 
 		gyro = new AnalogGyro(1);
-		victorFrontLeft = new Victor(0);
-		victorRearRight = new Victor(1);
-		victorRearLeft = new Victor(2);
-		victorFrontRight = new Victor(3);
+		victorFrontLeft = new Victor(2);
+		victorRearRight = new Victor(0);
+		victorRearLeft = new Victor(3);
+		victorFrontRight = new Victor(1);
 		drive=new RobotDrive(victorFrontLeft, victorRearLeft, victorFrontRight, victorRearRight);
 		
 	}
@@ -120,7 +120,7 @@ public class Robot extends IterativeRobot {
 		//System.out.println(pot.get());
 		drive.arcadeDrive(stick);
 		
-		/*SmartDashboard.putBoolean("LS1", LS1.get());
+		SmartDashboard.putBoolean("LS1", LS1.get());
 		SmartDashboard.putNumber("Encoder1", encoder1.get());
 		SmartDashboard.putNumber("Encoder2", encoder2.get());
 		SmartDashboard.putNumber("Potentiometer", pot.get());
@@ -133,7 +133,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Gyro Angles", gyro.getAngle());
 		SmartDashboard.putNumber("Timer time", timer.get());
 		SmartDashboard.putNumber("Talon1 speed", talon1.get());
-		*/
+		
 		//SmartDashboard.putNumber("Victor Motor speed in PWM value", victor.getSpeed());
 		//SmartDashboard.putNumber("Motor2 speed in PWM value", talon2.getSpeed());
 		
