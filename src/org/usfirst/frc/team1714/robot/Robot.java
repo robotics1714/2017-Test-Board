@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
 	AnalogGyro gyro;
 	Victor victorD1left,victorD1right,victorD2left, victorD2right;
 	Timer timer;
-	boolean timerStarted, timerStopped;
+	boolean timerStarted, timerStopped,LSbeforeTrigger,LSTriggering,LSTriggered;
 	double speed;
 	
 	public Robot() {
@@ -76,6 +76,7 @@ public class Robot extends IterativeRobot {
 		timer = new Timer();
 		timerStarted = false;
 		timerStopped = true;
+		LSbeforeTrigger = true;
 	}
 
 	/**
@@ -132,7 +133,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Gyro Angles", gyro.getAngle());
 		//SmartDashboard.putNumber("Victor Motor speed in PWM value", victor.getSpeed());
 		//SmartDashboard.putNumber("Motor2 speed in PWM value", talon2.getSpeed());
-		if(!LS1.get()){
+		if(!LS1.get() && LSbeforeTrigger){
+			/*
 			if(!timerStarted && timerStopped){
 				timer.start();
 				timerStarted = true;
@@ -142,9 +144,21 @@ public class Robot extends IterativeRobot {
 				timer.stop();
 				timerStarted = false;
 				timerStopped = true;
-			}
-			
-			
+			}*/
+			LSbeforeTrigger = false;
+			LSTriggering = true;
+		}
+		else if(LS1.get() && LSTriggering){
+			LSTriggered = true;
+			LSTriggering = false;
+			timer.start();
+		}
+		else if(!LS1.get() && LSTriggered){
+			LSTriggered = false;
+		}
+		else if(LS1.get() && !LSTriggered && !LSbeforeTrigger){
+			timer.stop();
+			LSbeforeTrigger = true;
 		}
 		
 		if(!timer.hasPeriodPassed(10.0)){
