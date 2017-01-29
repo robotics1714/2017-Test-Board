@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
 	AnalogGyro gyro;
 	Victor victorD1left,victorD1right,victorD2left, victorD2right;
 	Timer timer;
-	boolean timerStarted, timerStopped,LSbeforeTrigger,LSTriggering,LSTriggered;
+	boolean LSbeforeTrigger,LSTriggering,LSTriggered;
 	double speed;
 	
 	public Robot() {
@@ -74,8 +74,6 @@ public class Robot extends IterativeRobot {
 		gyro.calibrate();
 		gyro.setSensitivity(0.001675);
 		timer = new Timer();
-		timerStarted = false;
-		timerStopped = true;
 		LSbeforeTrigger = true;
 	}
 
@@ -131,20 +129,13 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Talon2Current", talon2.getOutputCurrent());
 		SmartDashboard.putNumber("Talon2", talon2.getOutputVoltage());
 		SmartDashboard.putNumber("Gyro Angles", gyro.getAngle());
+		SmartDashboard.putNumber("Timer time", timer.get());
+		SmartDashboard.putNumber("Talon1 speed", talon1.get());
 		//SmartDashboard.putNumber("Victor Motor speed in PWM value", victor.getSpeed());
 		//SmartDashboard.putNumber("Motor2 speed in PWM value", talon2.getSpeed());
+		
+		
 		if(!LS1.get() && LSbeforeTrigger){
-			/*
-			if(!timerStarted && timerStopped){
-				timer.start();
-				timerStarted = true;
-				timerStopped = false;
-			}
-			else if(timerStarted && !timerStopped){
-				timer.stop();
-				timerStarted = false;
-				timerStopped = true;
-			}*/
 			LSbeforeTrigger = false;
 			LSTriggering = true;
 		}
@@ -158,22 +149,23 @@ public class Robot extends IterativeRobot {
 		}
 		else if(LS1.get() && !LSTriggered && !LSbeforeTrigger){
 			timer.stop();
+			timer.reset();
 			LSbeforeTrigger = true;
 		}
 		
-		if(!timer.hasPeriodPassed(10.0)){
+		if(timer.get() < 10.0 && timer.get() > 1.0){
 			//victorD1left.set(speed);
 			//victorD2left.set(speed);
 			//victorD1right.set(speed);
 			//victorD2right.set(speed);
 			talon1.set(0.5);
 		}
-		else{
+		else if(timer.get() > 10.0){
 			//victorD1left.set(-speed);
 			//victorD2left.set(-speed);
 			//victorD1right.set(-speed);
 			//victorD2right.set(-speed);
-			talon1.set(-0.5);
+			talon1.set(-0.6);
 		}
 	
 		
