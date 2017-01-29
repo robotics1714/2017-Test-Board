@@ -36,7 +36,7 @@ public class Robot extends IterativeRobot {
 	RobotDrive drive;
 	Ultrasonic VEXultrasonic;
 	AnalogGyro gyro;
-	Victor victorD1left,victorD1right,victorD2left, victorD2right;
+	Victor victorFrontLeft,victorRearLeft,victorFrontRight, victorRearRight;
 	Timer timer;
 	boolean LSbeforeTrigger,LSTriggering,LSTriggered;
 	double speed;
@@ -47,15 +47,16 @@ public class Robot extends IterativeRobot {
 		talon1=new CANTalon(1);
 		talon2=new CANTalon(2);
 		LS1=new DigitalInput(4); 
-		drive=new RobotDrive(talon1,talon2);
+		
 		encoder1 = new Encoder(0,1);
 		encoder2 = new Encoder(2,3); 
 		VEXultrasonic = new Ultrasonic(9,8); 
 		gyro = new AnalogGyro(1);
-		victorD1left = new Victor(0);
-		victorD2right = new Victor(1);
-		victorD1right = new Victor(2);
-		victorD2left = new Victor(3);
+		victorFrontLeft = new Victor(0);
+		victorRearRight = new Victor(1);
+		victorRearLeft = new Victor(2);
+		victorFrontRight = new Victor(3);
+		drive=new RobotDrive(victorFrontLeft, victorRearLeft, victorFrontRight, victorRearRight);
 		
 	}
 
@@ -118,7 +119,8 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		//System.out.println(pot.get());
 		drive.arcadeDrive(stick);
-		SmartDashboard.putBoolean("LS1", LS1.get());
+		
+		/*SmartDashboard.putBoolean("LS1", LS1.get());
 		SmartDashboard.putNumber("Encoder1", encoder1.get());
 		SmartDashboard.putNumber("Encoder2", encoder2.get());
 		SmartDashboard.putNumber("Potentiometer", pot.get());
@@ -131,6 +133,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Gyro Angles", gyro.getAngle());
 		SmartDashboard.putNumber("Timer time", timer.get());
 		SmartDashboard.putNumber("Talon1 speed", talon1.get());
+		*/
 		//SmartDashboard.putNumber("Victor Motor speed in PWM value", victor.getSpeed());
 		//SmartDashboard.putNumber("Motor2 speed in PWM value", talon2.getSpeed());
 		
@@ -153,20 +156,21 @@ public class Robot extends IterativeRobot {
 			LSbeforeTrigger = true;
 		}
 		
+		/*
 		if(timer.get() < 10.0 && timer.get() > 1.0){
-			//victorD1left.set(speed);
-			//victorD2left.set(speed);
-			//victorD1right.set(speed);
-			//victorD2right.set(speed);
+			//victorFrontLeft.set(speed);
+			//victorFrontRight.set(speed);
+			//victorRearLeft.set(speed);
+			//victorRearRight.set(speed);
 			talon1.set(0.5);
 		}
 		else if(timer.get() > 10.0){
-			//victorD1left.set(-speed);
-			//victorD2left.set(-speed);
-			//victorD1right.set(-speed);
-			//victorD2right.set(-speed);
+			//victorFrontLeft.set(-speed);
+			//victorFrontRight.set(-speed);
+			//victorRearLeft.set(-speed);
+			//victorRearRight.set(-speed);
 			talon1.set(-0.6);
-		}
+		}*/
 	
 		
 		
