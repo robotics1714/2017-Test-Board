@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive; 
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.Victor;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,6 +36,7 @@ public class Robot extends IterativeRobot {
 	RobotDrive drive;
 	Ultrasonic VEXultrasonic;
 	AnalogGyro gyro;
+	Victor victor;
 	
 	public Robot() {
 		stick= new Joystick(0);
@@ -47,6 +49,7 @@ public class Robot extends IterativeRobot {
 		encoder2 = new Encoder(2,3); 
 		VEXultrasonic = new Ultrasonic(9,8); 
 		gyro = new AnalogGyro(1);
+		victor = new Victor(0);
 	}
 
 	/**
@@ -117,8 +120,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Talon2Current", talon2.getOutputCurrent());
 		SmartDashboard.putNumber("Talon2", talon2.getOutputVoltage());
 		SmartDashboard.putNumber("Gyro Angles", gyro.getAngle());
-		SmartDashboard.putNumber("Motor1 speed in PWM value", talon1.getSpeed());
-		SmartDashboard.putNumber("Motor2 speed in PWM value", talon2.getSpeed());
+		SmartDashboard.putNumber("Victor Motor speed in PWM value", victor.getSpeed());
+		//SmartDashboard.putNumber("Motor2 speed in PWM value", talon2.getSpeed());
 		
 	
 		
@@ -127,7 +130,7 @@ public class Robot extends IterativeRobot {
 		
 		//talon1.set(.5);
 		//talon2.set(.5);
-		//if(LS1.get()==false){
+		if(LS1.get()==false){
 			//drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
 			//drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
 			//drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, false);
@@ -135,12 +138,14 @@ public class Robot extends IterativeRobot {
 		//	talon1.set(-1);
 		//	talon2.set(-.25);
 		//	gyro.reset();
-		//}
-		//else
-		//{
+			victor.set(0.5);
+		}
+		else
+		{
 		//	talon1.set(0);
 		//	talon2.set(0);
-		//}
+			victor.set(1);
+		}
 		
 	}
 	
