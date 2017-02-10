@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1714.robot;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -15,6 +16,9 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Victor;
+
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -38,16 +42,20 @@ public class Robot extends IterativeRobot {
 	AnalogGyro gyro;
 	Victor victorFrontLeft,victorRearLeft,victorFrontRight, victorRearRight;
 	Timer timer;
+	DigitalInput irSensor;
+	PowerDistributionPanel pdp;
 	boolean LSbeforeTrigger,LSTriggering,LSTriggered;
 	double speed;
-	
+	PrintWriter currentWriter, timeWriter;
+
 	public Robot() {
 		stick= new Joystick(0);
 		pot = new AnalogPotentiometer(0, 3600, 0);
 		talon1=new CANTalon(1);
 		talon2=new CANTalon(2);
-		LS1=new DigitalInput(4); 
-		
+		LS1=new DigitalInput(10); 
+		irSensor = new DigitalInput(7);
+		timer = new Timer();
 		encoder1 = new Encoder(0,1);
 		encoder2 = new Encoder(2,3); 
 		VEXultrasonic = new Ultrasonic(9,8); 
@@ -76,6 +84,17 @@ public class Robot extends IterativeRobot {
 		gyro.setSensitivity(0.001675);
 		timer = new Timer();
 		LSbeforeTrigger = true;
+		encoder1.setDistancePerPulse(1);
+		pdp = new PowerDistributionPanel();
+		try{
+			currentWriter = new PrintWriter("/home/lvuser/current.txt", "UTF-8");
+			timeWriter = new PrintWriter("/home/lvuser/time.txt", "UTF-8");
+		}
+		catch(IOException e){
+			System.out.println(e.toString());
+			System.out.println("No good, slice");
+		}
+		timer.start();
 	}
 
 	/**
@@ -112,15 +131,53 @@ public class Robot extends IterativeRobot {
 			break;
 		}
 	}
+	
+	double encoderRate;
+	double expectedEncoderRate = 350;
+	double shootSpeedBuffer = 0.05;
+	double shootSpeedIncrement = 0.01;
+	double shootSpeed = 0;
+	
 	/**
 	 * This function is called periodically during operator control
 	 */
 	@Override
 	public void teleopPeriodic() {
-		//System.out.println(pot.get());
-		drive.arcadeDrive(stick);
+		if(pot.get() < 1500){
+			currentWriter.println(pdp.getCurrent(14));
+			timeWriter.println(Timer.getFPGATimestamp());
+		}
+		else
+		{
+			currentWriter.close();
+			timeWriter.close();
+		}
 		
-		SmartDashboard.putBoolean("LS1", LS1.get());
+		SmartDashboard.putNumber("current: ", pdp.getCurrent(14));
+		encoderRate = encoder1.getRate();
+		if(encoderRate < (expectedEncoderRate - shootSpeedBuffer)){
+			shootSpeed = (talon1.get() + shootSpeedIncrement);
+			System.out.println("yoin up" + shootSpeed);
+			//if the speed is slower than the speed we want, increase the speed till the speed is within buffer zone
+		}
+		else if(encoderRate > (expectedEncoderRate + shootSpeedBuffer)){
+			shootSpeed = (talon1.get() - shootSpeedIncrement);
+			System.out.println("yoin down" + shootSpeed);
+			//if the speed is faster than the speed we want, decrease the speed till the speed is within buffer zone
+		}
+		if(LS1.get())
+		{
+			talon1.set(shootSpeed);
+		}
+		else
+		{
+			talon1.set(1);
+		}
+		
+		//System.out.println(pot.get());
+		//drive.arcadeDrive(stick);
+		
+		SmartDashboard.getBoolean("LS1", LS1.get());
 		SmartDashboard.putNumber("Encoder1", encoder1.get());
 		SmartDashboard.putNumber("Encoder2", encoder2.get());
 		SmartDashboard.putNumber("Potentiometer", pot.get());
@@ -133,6 +190,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Gyro Angles", gyro.getAngle());
 		SmartDashboard.putNumber("Timer time", timer.get());
 		SmartDashboard.putNumber("Talon1 speed", talon1.get());
+		SmartDashboard.putBoolean("IR Sensed?", irSensor.get());
 		
 		//SmartDashboard.putNumber("Victor Motor speed in PWM value", victor.getSpeed());
 		//SmartDashboard.putNumber("Motor2 speed in PWM value", talon2.getSpeed());
@@ -156,7 +214,7 @@ public class Robot extends IterativeRobot {
 			LSbeforeTrigger = true;
 		}
 		
-		/*
+		/*a
 		if(timer.get() < 10.0 && timer.get() > 1.0){
 			//victorFrontLeft.set(speed);
 			//victorFrontRight.set(speed);
